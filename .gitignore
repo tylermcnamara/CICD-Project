@@ -1,0 +1,3 @@
+# === Dataset protection ===
+data/*
+!data/.gitkeep
