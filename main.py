@@ -40,7 +40,7 @@ def main():
     correctLoader = DMP.GetCorrectlyIdentifiedSamplesBalanced(model, 6, val_loader, 2)
 
     # Do the attacks
-    epsilonMax = 0.15  # Maximum perturbation
+    epsilonMax = 0.6  # Maximum perturbation
     clipMin = 0.0  # Minimum value a pixel can take
     clipMax = 1.0  # Maximum value a pixel can take
     numSteps = 10
