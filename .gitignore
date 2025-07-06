@@ -1,3 +1,4 @@
 # === Dataset protection ===
 Dataset/**
 !Dataset/.gitkeep
+/*.pth
