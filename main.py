@@ -1,10 +1,10 @@
 import os
 import torch
 import DataManagerPytorchL as DMP
-import attacks
+from pgd import PGDNativePytorch
 from torchvision import transforms
 from model import LeNet
-from utils import trainValidDataLoader, train_model, validateD
+from utils import trainValidDataLoader, trainModel, validateD
 
 def main():
     # Set up transform
@@ -16,7 +16,7 @@ def main():
     # Load data
     train_loader, val_loader = trainValidDataLoader(
         data_dir="Dataset",
-        batch_size=25,
+        batch_size=5,
         transform=transform
     )
     # Initialize model
@@ -30,7 +30,7 @@ def main():
         print("Model loaded from save")
     else:
         # No saved model, train it then save
-        train_model(model, train_loader, val_loader, epochs=10, lr=0.00001, device=device)
+        trainModel(model, train_loader, val_loader, epochs=10, lr=0.00001, device=device)
         model.eval()
         torch.save(model.state_dict(), "lenet_weights.pth")
 
@@ -46,10 +46,10 @@ def main():
     numSteps = 10
     epsilonStep = epsilonMax / numSteps # Amount of change per step
     # Load adversarial images
-    advLoader = attacks.PGDNativePytorch(device, val_loader, model, epsilonMax, epsilonStep, numSteps, clipMin, clipMax)
+    advLoader = PGDNativePytorch(device, val_loader, model, epsilonMax, epsilonStep, numSteps, clipMin, clipMax)
     # Get accuarcy of model on malicious examples
     advAcc = validateD(advLoader, model, device)
-    print(f"Adv Accuarcy: {advAcc * 100:.2f}")
+    print(f"Adv Accuarcy: {advAcc * 100:.2f}%")
     # Clean up images to be shown
     xCleanTensor, yCleaTensor = DMP.DataLoaderToTensor(val_loader)
     xAdvTensor, _ = DMP.DataLoaderToTensor(advLoader)

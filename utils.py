@@ -91,7 +91,7 @@ def validateD(valLoader, model, device='cpu'):
     return acc
 
 # Train Method: teaches model for use on validation set
-def train_model(model, train_loader, val_loader, epochs=100, lr=0.0001, device='cpu'):
+def trainModel(model, train_loader, val_loader, epochs=100, lr=0.0001, device='cpu'):
     # Move model to desired device
     model.to(device)
     # Set loss function to CEL, best for classification
